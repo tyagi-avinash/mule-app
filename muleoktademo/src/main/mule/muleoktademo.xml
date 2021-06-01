@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:os="http://www.mulesoft.org/schema/mule/os" xmlns:api-gateway="http://www.mulesoft.org/schema/mule/api-gateway"
+	xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core"
+	xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd
+http://www.mulesoft.org/schema/mule/api-gateway http://www.mulesoft.org/schema/mule/api-gateway/current/mule-api-gateway.xsd
+http://www.mulesoft.org/schema/mule/os http://www.mulesoft.org/schema/mule/os/current/mule-os.xsd">
+	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="0fd3df14-63ef-4690-910b-019768169f26" >
+		<http:listener-connection host="0.0.0.0" port="8081" />
+	</http:listener-config>
+	<api-gateway:autodiscovery apiId="16876177" ignoreBasePath="true" doc:name="API Autodiscovery" doc:id="b9be4de2-d3ee-465d-a571-8dd4d6def816" flowRef="muleoktademoFlow" />
+	<flow name="muleoktademoFlow" doc:id="caadca30-4d1d-4136-afe8-aa4cc9403643" >
+		<http:listener doc:name="Listener" doc:id="2c29daff-45d9-488a-9d0e-fa899a164a08" config-ref="HTTP_Listener_config" path="/okta"/>
+		<logger level="INFO" doc:name="Logger" doc:id="89698712-b5cd-4088-b679-45404b8f3a55" message="#[payload]"/>
+		<set-payload value="hello" doc:name="Set Payload" doc:id="a9d4b1b9-6c6c-41e9-8275-0eb396b2dc0d" />
+		<os:store doc:id="943b2228-7005-4b27-8e38-080172d4751a" key="hello">
+			<os:value ><![CDATA[#["world"]]]></os:value>
+		</os:store>
+		<os:retrieve doc:name="Retrieve" doc:id="59b3d497-e2b7-4a61-b103-f08f9e167efa" key="hello" target="new"/>
+		<logger level="INFO" doc:name="Logger" doc:id="d680d697-0eb3-43b4-89fc-17215494ef13" message="#[vars.new]"/>
+	</flow>
+</mule>
